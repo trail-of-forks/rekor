@@ -204,3 +204,6 @@ require (
 	gopkg.in/yaml.v2 v2.4.0
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+// TODO: replace this
+replace github.com/sigstore/sigstore => github.com/trail-of-forks/sigstore v0.0.0-20240111141334-bcd0b6e69e27

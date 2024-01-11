@@ -1659,7 +1659,8 @@ func init() {
               "description": "The hashing function used to compute the hash value",
               "type": "string",
               "enum": [
-                "sha256"
+                "sha256",
+                "sha512"
               ]
             },
             "value": {
@@ -1682,7 +1683,8 @@ func init() {
           "description": "The hashing function used to compute the hash value",
           "type": "string",
           "enum": [
-            "sha256"
+            "sha256",
+            "sha512"
           ]
         },
         "value": {
@@ -3261,7 +3263,8 @@ func init() {
                   "description": "The hashing function used to compute the hash value",
                   "type": "string",
                   "enum": [
-                    "sha256"
+                    "sha256",
+                    "sha512"
                   ]
                 },
                 "value": {
