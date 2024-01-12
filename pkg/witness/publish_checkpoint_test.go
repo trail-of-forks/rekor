@@ -45,7 +45,7 @@ func TestPublishCheckpoint(t *testing.T) {
 		Help: "Checkpoint publishing by shard and code",
 	}, []string{"shard", "code"})
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	signer, _ := signature.LoadSigner(priv, crypto.SHA256)
+	signer, _ := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -100,7 +100,7 @@ func TestPublishCheckpointMultiple(t *testing.T) {
 		Help: "Checkpoint publishing by shard and code",
 	}, []string{"shard", "code"})
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	signer, _ := signature.LoadSigner(priv, crypto.SHA256)
+	signer, _ := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -165,7 +165,7 @@ func TestPublishCheckpointTrillianError(t *testing.T) {
 		Help: "Checkpoint publishing by shard and code",
 	}, []string{"shard", "code"})
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	signer, _ := signature.LoadSigner(priv, crypto.SHA256)
+	signer, _ := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -201,7 +201,7 @@ func TestPublishCheckpointInvalidTrillianResponse(t *testing.T) {
 		Help: "Checkpoint publishing by shard and code",
 	}, []string{"shard", "code"})
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	signer, _ := signature.LoadSigner(priv, crypto.SHA256)
+	signer, _ := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -238,7 +238,7 @@ func TestPublishCheckpointRedisFailure(t *testing.T) {
 		Help: "Checkpoint publishing by shard and code",
 	}, []string{"shard", "code"})
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	signer, _ := signature.LoadSigner(priv, crypto.SHA256)
+	signer, _ := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -282,7 +282,7 @@ func TestPublishCheckpointRedisLatestFailure(t *testing.T) {
 		Help: "Checkpoint publishing by shard and code",
 	}, []string{"shard", "code"})
 	priv, _ := ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	signer, _ := signature.LoadSigner(priv, crypto.SHA256)
+	signer, _ := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()

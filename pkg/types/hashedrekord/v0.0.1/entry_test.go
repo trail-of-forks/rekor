@@ -93,7 +93,7 @@ func TestCrossFieldValidation(t *testing.T) {
 	h := sha256.Sum256(dataBytes)
 	dataSHA := hex.EncodeToString(h[:])
 
-	signer, _ := signature.LoadSigner(key, crypto.SHA256)
+	signer, _ := signature.LoadSigner(key, crypto.SHA256, signature.LoadDefaultSV, nil)
 	sigBytes, _ := signer.SignMessage(bytes.NewReader(dataBytes))
 
 	incorrectLengthHash := sha256.Sum224(dataBytes)

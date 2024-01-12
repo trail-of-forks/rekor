@@ -104,7 +104,7 @@ func signData(t *testing.T, b []byte, pkey string) []byte {
 	if err != nil {
 		t.Fatal(err)
 	}
-	signer, err := signature.LoadSigner(priv, crypto.SHA256)
+	signer, err := signature.LoadSigner(priv, crypto.SHA256, signature.LoadDefaultSV, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -320,7 +320,7 @@ func TestPublicKeyWithCertChain(t *testing.T) {
 
 	// Generate signature to verify
 	data := []byte("test")
-	signer, err := signature.LoadSigner(leafKey, crypto.SHA256)
+	signer, err := signature.LoadSigner(leafKey, crypto.SHA256, signature.LoadDefaultSV, nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -341,7 +341,7 @@ func TestPublicKeyWithCertChain(t *testing.T) {
 	leafCert, leafKey, _ = testutils.GenerateExpiredLeafCert("subject@example.com", "oidc-issuer", subCert, subKey)
 	pemCertChain, _ = cryptoutils.MarshalCertificatesToPEM([]*x509.Certificate{leafCert, subCert, rootCert})
 	pub, _ = NewPublicKey(bytes.NewReader(pemCertChain))
-	signer, _ = signature.LoadSigner(leafKey, crypto.SHA256)
+	signer, _ = signature.LoadSigner(leafKey, crypto.SHA256, signature.LoadDefaultSV, nil)
 	sigBytes, _ = signer.SignMessage(bytes.NewReader(data))
 	s, _ = NewSignature(bytes.NewReader(sigBytes))
 	err = s.Verify(bytes.NewReader(data), pub)
@@ -352,7 +352,7 @@ func TestPublicKeyWithCertChain(t *testing.T) {
 	// Verify error with invalid chain
 	pemCertChain, _ = cryptoutils.MarshalCertificatesToPEM([]*x509.Certificate{leafCert, rootCert})
 	pub, _ = NewPublicKey(bytes.NewReader(pemCertChain))
-	signer, _ = signature.LoadSigner(leafKey, crypto.SHA256)
+	signer, _ = signature.LoadSigner(leafKey, crypto.SHA256, signature.LoadDefaultSV, nil)
 	sigBytes, _ = signer.SignMessage(bytes.NewReader(data))
 	s, _ = NewSignature(bytes.NewReader(sigBytes))
 	err = s.Verify(bytes.NewReader(data), pub)
@@ -364,7 +364,7 @@ func TestPublicKeyWithCertChain(t *testing.T) {
 	leafCert, leafKey, _ = testutils.GenerateLeafCert("subject@example.com", "oidc-issuer", nil, rootCert, rootKey)
 	pemCertChain, _ = cryptoutils.MarshalCertificatesToPEM([]*x509.Certificate{leafCert, rootCert})
 	pub, _ = NewPublicKey(bytes.NewReader(pemCertChain))
-	signer, _ = signature.LoadSigner(leafKey, crypto.SHA256)
+	signer, _ = signature.LoadSigner(leafKey, crypto.SHA256, signature.LoadDefaultSV, nil)
 	sigBytes, _ = signer.SignMessage(bytes.NewReader(data))
 	s, _ = NewSignature(bytes.NewReader(sigBytes))
 	err = s.Verify(bytes.NewReader(data), pub)

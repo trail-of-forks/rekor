@@ -273,7 +273,7 @@ func TestSignedEntryTimestamp(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	verifier, err := signature.LoadVerifier(rekorPubKey, crypto.SHA256)
+	verifier, err := signature.LoadVerifier(rekorPubKey, crypto.SHA256, signature.LoadDefaultSV, nil)
 	if err != nil {
 		t.Fatal(err)
 	}

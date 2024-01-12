@@ -37,6 +37,7 @@ import (
 	"github.com/sigstore/rekor/pkg/pki/x509"
 	"github.com/sigstore/rekor/pkg/types"
 	hashedrekord "github.com/sigstore/rekor/pkg/types/hashedrekord"
+	"github.com/sigstore/sigstore/pkg/signature"
 	"github.com/sigstore/sigstore/pkg/signature/options"
 )
 
@@ -145,7 +146,8 @@ func (v *V001Entry) validate() (pki.Signature, pki.PublicKey, error) {
 		return nil, nil, types.ValidationError(errors.New("missing signature"))
 	}
 	// Hashed rekord type only works for x509 signature types
-	sigObj, err := x509.NewSignature(bytes.NewReader(sig.Content))
+	// Use ED25519ph when ED25519 public keys are provided by the client
+	sigObj, err := x509.NewSignatureWithOpts(bytes.NewReader(sig.Content), signature.LoadED25519phSV, nil)
 	if err != nil {
 		return nil, nil, types.ValidationError(err)
 	}

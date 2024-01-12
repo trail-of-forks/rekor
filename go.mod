@@ -206,4 +206,4 @@ require (
 )
 
 // TODO: replace this
-replace github.com/sigstore/sigstore => github.com/trail-of-forks/sigstore v0.0.0-20240111141334-bcd0b6e69e27
+replace github.com/sigstore/sigstore => github.com/trail-of-forks/sigstore v0.0.0-20240112143627-ef70c23a75c8

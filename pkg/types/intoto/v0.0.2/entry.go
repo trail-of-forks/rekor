@@ -426,7 +426,7 @@ func verifyEnvelope(allPubKeyBytes [][]byte, env *dsse.Envelope) (map[string]*x5
 			return nil, fmt.Errorf("could not parse public key as x509: %w", err)
 		}
 
-		vfr, err := signature.LoadVerifier(key.CryptoPubKey(), crypto.SHA256)
+		vfr, err := signature.LoadVerifier(key.CryptoPubKey(), crypto.SHA256, signature.LoadDefaultSV, nil)
 		if err != nil {
 			return nil, fmt.Errorf("could not load verifier: %w", err)
 		}

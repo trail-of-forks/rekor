@@ -35,7 +35,7 @@ func NewFile(keyPath, keyPass string) (*File, error) {
 		return nil, fmt.Errorf("file: provide a valid signer, %s is not valid: %w", keyPath, err)
 	}
 
-	signer, err := signature.LoadSignerVerifier(opaqueKey, crypto.SHA256)
+	signer, err := signature.LoadSignerVerifier(opaqueKey, crypto.SHA256, signature.LoadDefaultSV, nil)
 	if err != nil {
 		return nil, fmt.Errorf(`file: loaded private key from %s can't be used to sign: %w`, keyPath, err)
 	}

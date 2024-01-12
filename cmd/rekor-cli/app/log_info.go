@@ -181,7 +181,7 @@ func loadVerifier(rekorClient *rclient.Rekor) (signature.Verifier, error) {
 		return nil, err
 	}
 
-	return signature.LoadVerifier(pub, crypto.SHA256)
+	return signature.LoadVerifier(pub, crypto.SHA256, signature.LoadDefaultSV, nil)
 }
 
 func totalTreeSize(activeShard *models.LogInfo, inactiveShards []*models.InactiveShardLogInfo) int64 {

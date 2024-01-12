@@ -249,7 +249,7 @@ func (v *V001Entry) validate() error {
 		return nil
 	}
 
-	vfr, err := signature.LoadVerifier(pk.CryptoPubKey(), crypto.SHA256)
+	vfr, err := signature.LoadVerifier(pk.CryptoPubKey(), crypto.SHA256, signature.LoadDefaultSV, nil)
 	if err != nil {
 		return err
 	}
