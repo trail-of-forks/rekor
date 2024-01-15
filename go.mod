@@ -43,7 +43,7 @@ require (
 	golang.org/x/sync v0.6.0
 	google.golang.org/genproto v0.0.0-20231120223509-83a465c0220f // indirect
 	google.golang.org/grpc v1.60.1
-	google.golang.org/protobuf v1.31.0
+	google.golang.org/protobuf v1.32.0
 	gopkg.in/ini.v1 v1.67.0
 	sigs.k8s.io/release-utils v0.7.7
 	sigs.k8s.io/yaml v1.4.0
@@ -207,3 +207,5 @@ require (
 
 // TODO: replace this
 replace github.com/sigstore/sigstore => github.com/trail-of-forks/sigstore v0.0.0-20240112143627-ef70c23a75c8
+
+replace github.com/sigstore/protobuf-specs => github.com/trail-of-forks/protobuf-specs v0.0.0-20240109061816-794a4ed0d1b2
