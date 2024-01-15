@@ -26,10 +26,12 @@ import (
 	"github.com/google/trillian"
 	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
+	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
+	v1 "github.com/sigstore/protobuf-specs/gen/pb-go/common/v1"
 	"github.com/sigstore/rekor/pkg/indexstorage"
 	"github.com/sigstore/rekor/pkg/log"
 	"github.com/sigstore/rekor/pkg/pubsub"
@@ -70,6 +72,7 @@ type API struct {
 	// Publishes notifications when new entries are added to the log. May be
 	// nil if no publisher is configured.
 	newEntryPublisher pubsub.Publisher
+	algorithmRegistry *AlgorithmRegistry
 }
 
 func NewAPI(treeID uint) (*API, error) {
@@ -101,6 +104,20 @@ func NewAPI(treeID uint) (*API, error) {
 	}
 	log.Logger.Infof("Starting Rekor server with active tree %v", tid)
 	ranges.SetActive(tid)
+
+	algorithmStrings := viper.GetStringSlice("client-signing-algorithms")
+	var algorithmConfig []v1.SupportedAlgorithm
+	for _, s := range algorithmStrings {
+		algorithmValue, ok := v1.SupportedAlgorithm_value[s]
+		if !ok {
+			log.Logger.Fatalf("%s is not a valid value for \"client-signing-algorithms\". Try: %s", s, maps.Keys(v1.SupportedAlgorithm_value))
+		}
+		algorithmConfig = append(algorithmConfig, v1.SupportedAlgorithm(algorithmValue))
+	}
+	algorithmRegistry, err := NewAlgorithmRegistry(algorithmConfig)
+	if err != nil {
+		log.Logger.Fatalf("error loading --client-signing-algorithms=%s: %v", algorithmConfig, err)
+	}
 
 	rekorSigner, err := signer.New(ctx, viper.GetString("rekor_server.signer"),
 		viper.GetString("rekor_server.signer-passwd"))
@@ -142,6 +159,7 @@ func NewAPI(treeID uint) (*API, error) {
 		signer:     rekorSigner,
 		// Utility functionality not required for operation of the core service
 		newEntryPublisher: newEntryPublisher,
+		algorithmRegistry: algorithmRegistry,
 	}, nil
 }
 

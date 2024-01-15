@@ -23,9 +23,11 @@ import (
 	"time"
 
 	homedir "github.com/mitchellh/go-homedir"
+	v1 "github.com/sigstore/protobuf-specs/gen/pb-go/common/v1"
 	"github.com/sigstore/rekor/pkg/log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"golang.org/x/exp/maps"
 
 	"sigs.k8s.io/release-utils/version"
 )
@@ -130,6 +132,8 @@ Memory and file-based signers should only be used for testing.`)
 	rootCmd.PersistentFlags().Duration("search_index.mysql.conn_max_lifetime", 0*time.Second, "maximum connection lifetime")
 	rootCmd.PersistentFlags().Int("search_index.mysql.max_open_connections", 0, "maximum open connections")
 	rootCmd.PersistentFlags().Int("search_index.mysql.max_idle_connections", 0, "maximum idle connections")
+
+	rootCmd.PersistentFlags().StringSlice("client-signing-algorithms", maps.Keys(v1.SupportedAlgorithm_value), "the list of allowed client signing algorithms")
 
 	if err := viper.BindPFlags(rootCmd.PersistentFlags()); err != nil {
 		log.Logger.Fatal(err)
