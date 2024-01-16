@@ -18,6 +18,7 @@ package hashedrekord
 import (
 	"bytes"
 	"context"
+	"crypto"
 	"crypto/ed25519"
 	"crypto/sha256"
 	"encoding/hex"
@@ -38,6 +39,7 @@ import (
 	"github.com/sigstore/rekor/pkg/pki/x509"
 	"github.com/sigstore/rekor/pkg/types"
 	hashedrekord "github.com/sigstore/rekor/pkg/types/hashedrekord"
+	"github.com/sigstore/rekor/pkg/util"
 	"github.com/sigstore/sigstore/pkg/signature/options"
 )
 
@@ -189,6 +191,17 @@ func (v *V001Entry) validate() (pki.Signature, pki.PublicKey, error) {
 	return sigObj, keyObj, nil
 }
 
+func getDataHashAlgorithm(hashAlgorithm crypto.Hash) string {
+	switch hashAlgorithm {
+	case crypto.SHA256:
+		return models.HashedrekordV001SchemaDataHashAlgorithmSha256
+	case crypto.SHA512:
+		return models.HashedrekordV001SchemaDataHashAlgorithmSha512
+	default:
+		return models.HashedrekordV001SchemaDataHashAlgorithmSha256
+	}
+}
+
 func (v V001Entry) CreateFromArtifactProperties(_ context.Context, props types.ArtifactProperties) (models.ProposedEntry, error) {
 	returnVal := models.Hashedrekord{}
 	re := V001Entry{}
@@ -230,10 +243,11 @@ func (v V001Entry) CreateFromArtifactProperties(_ context.Context, props types.A
 		return nil, errors.New("only one public key must be provided")
 	}
 
+	hashAlgorithm, hashValue := util.UnprefixSHA(props.ArtifactHash)
 	re.HashedRekordObj.Signature.PublicKey.Content = strfmt.Base64(publicKeyBytes[0])
 	re.HashedRekordObj.Data.Hash = &models.HashedrekordV001SchemaDataHash{
-		Algorithm: swag.String(models.HashedrekordV001SchemaDataHashAlgorithmSha256),
-		Value:     swag.String(props.ArtifactHash),
+		Algorithm: swag.String(getDataHashAlgorithm(hashAlgorithm)),
+		Value:     swag.String(hashValue),
 	}
 
 	if _, _, err := re.validate(); err != nil {

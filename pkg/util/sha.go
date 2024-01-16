@@ -15,6 +15,7 @@
 package util
 
 import (
+	"crypto"
 	"fmt"
 	"strings"
 )
@@ -38,4 +39,35 @@ func PrefixSHA(sha string) string {
 	}
 
 	return fmt.Sprintf("%v%v", prefix, sha)
+}
+
+func UnprefixSHA(sha string) (crypto.Hash, string) {
+	components := strings.Split(sha, ":")
+
+	if len(components) == 2 {
+		prefix := components[0]
+		sha = components[1]
+
+		switch prefix {
+		case "sha1":
+			return crypto.SHA1, sha
+		case "sha256":
+			return crypto.SHA256, sha
+		case "sha512":
+			return crypto.SHA512, sha
+		default:
+			return crypto.Hash(0), ""
+		}
+	}
+
+	switch len(sha) {
+	case 40:
+		return crypto.SHA1, sha
+	case 64:
+		return crypto.SHA256, sha
+	case 128:
+		return crypto.SHA512, sha
+	}
+
+	return crypto.Hash(0), ""
 }

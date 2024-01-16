@@ -38,7 +38,7 @@
                         "algorithm": {
                             "description": "The hashing function used to compute the hash value",
                             "type": "string",
-                            "enum": [ "sha256" ]
+                            "enum": [ "sha256", "sha512" ]
                         },
                         "value": {
                             "description": "The hash value for the content",
