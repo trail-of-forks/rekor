@@ -347,9 +347,9 @@ func (v *V001Entry) CreateFromArtifactProperties(ctx context.Context, props type
 	}
 
 	if err := re.validate(); err != nil {
-		return nil, err 
-  }
-  
+		return nil, err
+	}
+
 	if _, _, err := re.fetchExternalEntities(ctx); err != nil {
 		return nil, fmt.Errorf("error retrieving external entities: %w", err)
 	}
